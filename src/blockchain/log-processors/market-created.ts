@@ -82,7 +82,8 @@ export function processMarketCreatedLog(db: Knex, augur: Augur, trx: Knex.Transa
           });
         }, (err: Error|null): void => {
           if (err) return callback(err);
-          const outcomeNames: Array<string|number|null> = (log.marketType === "1" && extraInfo!.outcomeNames) ? extraInfo!.outcomeNames! : new Array(numOutcomes).fill(null);
+          const outcomeNames: Array<string|number|null> = (log.marketType === "1" && log!.outcomeNames) ? log!.outcomeNames! : new Array(numOutcomes).fill(null);
+          console.log("ZZ OUTCOME NAMES: ", marketType, log, outcomeNames);
           parallel([
             (next: AsyncCallback): void => {
               db.transacting(trx).insert(marketsDataToInsert).into("markets").asCallback(next);
